@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
+import 'dart:ui';
 
 import 'package:http/http.dart';
 
@@ -24,22 +26,66 @@ class ProductRemoteDatasourceImpl extends ProductRemoteDatasource {
 
 
   @override
-  Future<ProductModel> addProduct(ProductModel product) async {
-    final response = await client.post(
-      Uri.parse(Urls.addProductUrl()),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(product.toJson()),
-    );
+  Future<ProductModel> addProduct(ProductModel product) async{
+    final String apiUrl= Urls.addProductUrl();
+    try {
+      File file=File(product.imageUrl);
+      var exist=await file.exists();
+      if (!exist){
+        throw Exception("image file does not exist.");
+      }
 
-    // the above is sending the product to api by converting it to json 
-    // the code below is reciving respons from api then converig it to dart
 
-    if (response.statusCode == 201) {
-      return ProductModel.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to add product');
+      var request= http.MultipartRequest('POST',Uri.parse(apiUrl));
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+           file.path,
+           contentType: MediaType('image', 'jpg'),
+           ));
+
+           request.fields['id']=product.id;
+           request.fields['name']=product.name;
+           request.fields['price']=product.price.toString();
+           request.fields['description']=product.description;
+
+
+           var respons= await client.send(request);
+
+           if (respons.statusCode==201){
+            final responseBody = await respons.stream.bytesToString();
+            final data = json.decode(responseBody);
+            return ProductModel.fromJson(data);
+           }else{
+            final responseBody= await respons.stream.bytesToString();
+            final data=json.decode(responseBody);
+            throw Exception(
+              "Failed to add product $data"
+            );
+           }
+    }catch(e){
+      throw Exception('error adding product: $e');
     }
+
   }
+
+
+  // Future<ProductModel> addProduct(ProductModel product) async {
+  //   final response = await client.post(
+  //     Uri.parse(Urls.addProductUrl()),
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: json.encode(product.toJson()),
+  //   );
+
+  //   // the above is sending the product to api by converting it to json 
+  //   // the code below is reciving respons from api then converig it to dart
+
+  //   if (response.statusCode == 201) {
+  //     return ProductModel.fromJson(json.decode(response.body));
+  //   } else {
+  //     throw Exception('Failed to add product');
+  //   }
+  // }
 
   @override
   Future<List<ProductModel>> displayAllProducts() async {

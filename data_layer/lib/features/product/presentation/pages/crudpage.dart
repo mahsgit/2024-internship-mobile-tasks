@@ -13,7 +13,8 @@ class Crudpage extends StatefulWidget {
 }
 
 class _CrudpageState extends State<Crudpage> {
-  String _imagePath = '';
+  File? _Image;
+  String _imagePath = '/images/image.png';
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _categorycontroller = TextEditingController();
   final TextEditingController _pricecontroller = TextEditingController();
@@ -21,10 +22,12 @@ class _CrudpageState extends State<Crudpage> {
 
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    final XFile? pickedimage = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedimage != null) {
       setState(() {
-        _imagePath = image.path;
+        _Image=File(pickedimage.path);
+  
+        _imagePath = pickedimage.path;
       });
     }
   }
@@ -35,13 +38,13 @@ class _CrudpageState extends State<Crudpage> {
     final double price = double.parse(_pricecontroller.text);
     final String description = _descriptioncontroller.text;
 
-    if (name.isNotEmpty && category.isNotEmpty) {
+    if (name.isNotEmpty && category.isNotEmpty ) {
       final newProduct = Product(
         name: name,
         category: category,
         price: price,
         rating: 0.0,
-        Image: File(_imagePath),
+        image: File(_Image!.path),
         description: description,
       );
 
