@@ -3,12 +3,19 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task6/features/product/presentation/pages/detail.dart';
-import 'package:task6/features/product/presentation/widgets/productmodel.dart';
 
+import '../../domain/entities/product.dart';
+
+
+
+
+
+  final  File defaultimage=File('images/image.png');
 class ProductCard extends StatelessWidget {
+  
   final List<Product> products;
 
-  const ProductCard({super.key, required this.products});
+   ProductCard({super.key, required this.products});
 
   List<Widget> _buildCard(BuildContext context) {
     return products.map((product) {
@@ -21,8 +28,8 @@ class ProductCard extends StatelessWidget {
                 productCategory: product.category,
                 productPrice: product.price,
                 productRating: product.rating,
-                productImage: product.image,
-                productImagefile: product.Image,
+                productImage: product.imageUrl,
+                // productImagefile: product.Image,
                 productDescription: product.description,
               ),
             ),
@@ -37,19 +44,26 @@ class ProductCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              product.Image != null
-                  ? Image.file(
-                      product.Image!,
-                      fit: BoxFit.cover,
-                      height: 150,
-                      width: double.infinity,
-                    )
-                  : Image.asset(
-                      product.image,
+                  Image.network(
+                      product.imageUrl,
                       fit: BoxFit.cover,
                       height: 150,
                       width: double.infinity,
                     ),
+                
+              // product.Image != null
+              //     ? Image.file(
+              //         product.Image!,
+              //         fit: BoxFit.cover,
+              //         height: 150,
+              //         width: double.infinity,
+              //       )
+              //     : Image.asset(
+              //         product.image,
+              //         fit: BoxFit.cover,
+              //         height: 150,
+              //         width: double.infinity,
+              //       ),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(

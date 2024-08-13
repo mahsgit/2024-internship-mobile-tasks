@@ -7,9 +7,14 @@ import '../../data/models/product_model.dart';
 class Product extends Equatable{
   final String id;
   final String name;
+  final String category="MEN";
+
   final String description;
   final double price;
+  final double rating=2.3;
+
   final String imageUrl;
+
 
 
 

@@ -9,7 +9,7 @@ class Detail extends StatelessWidget {
   final double productPrice;
   final double productRating;
   final String productImage;
-  final File? productImagefile;
+  // final File? productImagefile;
   final String productDescription;
 
   const Detail({
@@ -19,7 +19,7 @@ class Detail extends StatelessWidget {
     required this.productPrice,
     required this.productRating,
     required this.productImage,
-    this.productImagefile,
+    // this.productImagefile,
 
     required this.productDescription,
   });
@@ -39,7 +39,7 @@ class Detail extends StatelessWidget {
                     height: 200,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(productImage),
+                        image: NetworkImage(productImage),
                         fit: BoxFit.cover,
                       ),
                     ),
