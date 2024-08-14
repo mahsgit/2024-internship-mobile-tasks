@@ -1,28 +1,36 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task6/features/product/presentation/widgets/horizontalscrol.dart';
 
+import '../bloc/addbloc/add_bloc.dart';
+import '../bloc/addbloc/add_bloc_event.dart';
+import '../bloc/addbloc/add_bloc_state.dart';
+import 'crudpage.dart';
+
 class Detail extends StatelessWidget {
+  final String productId;
   final String productName;
   final String productCategory;
   final double productPrice;
   final double productRating;
   final String productImage;
-  // final File? productImagefile;
   final String productDescription;
 
   const Detail({
     super.key,
+    required this.productId,
     required this.productName,
     required this.productCategory,
     required this.productPrice,
     required this.productRating,
     required this.productImage,
-    // this.productImagefile,
-
     required this.productDescription,
   });
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -131,32 +139,52 @@ class Detail extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/');
+                  BlocBuilder<DeleteBloc, AddBlocState>(
+                    builder: (context, state) {
+                      return OutlinedButton(
+                                      onPressed: () {
+                                        context.read<DeleteBloc>().add(DeleteData(id: productId));
+                                       
+                                      },
+                                      child: Text(
+                                        "Delete",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        minimumSize: Size(150, 50),
+                                        side: BorderSide(
+                                          color: Colors.red,
+                                          width: 2,
+                                        ),
+                                      ),
+                                    );
                     },
-                    child: Text(
-                      "Delete",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 15,
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      minimumSize: Size(150, 50),
-                      side: BorderSide(
-                        color: Colors.red,
-                        width: 2,
-                      ),
-                    ),
                   ),
                   SizedBox(width: 60),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/');
+                      {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Crudpage(
+                              productId: productId,
+                              productName: productName,
+                              productCategory: productCategory,
+                              productPrice: productPrice,
+                              productRating: productRating,
+                              productImage: productImage,
+                              productDescription: productDescription,
+                            ),
+                          ),
+                        );
+                      }
+                      ;
                     },
                     child: Text(
                       "Update",

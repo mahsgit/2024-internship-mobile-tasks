@@ -4,27 +4,23 @@ import '../../data/models/product_model.dart';
 
 //entity contain attributes or properties
 
-class Product extends Equatable{
+class Product extends Equatable {
   final String id;
   final String name;
-  final String category="MEN";
-
+  final String category; 
   final String description;
   final double price;
-  final double rating=2.3;
-
+  final double rating; 
   final String imageUrl;
-
-
-
 
   const Product({
     required this.id,
+    this.category = 'MEN', 
     required this.name,
     required this.description,
     required this.price,
-    required this.imageUrl
-
+    this.rating = 2.3, 
+    required this.imageUrl,
   });
 
 

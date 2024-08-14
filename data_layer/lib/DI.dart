@@ -15,6 +15,7 @@ import 'features/product/domain/usecases/delete_product_usecase.dart';
 import 'features/product/domain/usecases/update_product_usecase.dart';
 import 'features/product/domain/usecases/view_all_products_usecase.dart';
 import 'features/product/domain/usecases/view_specific_product_usecase.dart';
+import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
 
 final getIt = GetIt.instance;
@@ -41,4 +42,9 @@ Future<void> setup() async {
   getIt.registerSingleton<CreateProductUsecase>(CreateProductUsecase(getIt()));
   getIt
       .registerSingleton<HomeBlock>(HomeBlock(viewAllProductsUsecase: getIt()));
+  getIt.registerSingleton<AddBloc>(AddBloc(createProductUsecase: getIt()));
+  getIt
+      .registerSingleton<UpdateBloc>(UpdateBloc(updateProductUsecase: getIt()));
+  getIt
+      .registerSingleton<DeleteBloc>(DeleteBloc(deleteProductUsecase: getIt()));
 }

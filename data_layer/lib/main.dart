@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
+import 'features/product/presentation/bloc/addbloc/add_bloc_state.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
 import 'features/product/presentation/bloc/homebloc/home_event.dart';
 import 'features/product/presentation/bloc/homebloc/home_state.dart';
@@ -13,13 +16,26 @@ import 'features/product/presentation/widgets/productcard.dart';
 import 'features/product/presentation/widgets/productmodel.dart';
 import 'DI.dart';
 
-const int _customColorPrimaryValue = 0xFF2196F3;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setup();
-  runApp(BlocProvider(
-      create: (context) => getIt.get<HomeBlock>()..add(FetchData()), child: MyApp()));
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => getIt.get<HomeBlock>()..add(FetchData()),
+      ),
+      BlocProvider(
+        create: (context) => getIt.get<AddBloc>(),
+      ),
+      BlocProvider(
+        create: (context) => getIt.get<UpdateBloc>(),
+      ),
+       BlocProvider(
+        create: (context) => getIt.get<DeleteBloc>(),
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

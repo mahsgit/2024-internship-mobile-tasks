@@ -12,25 +12,7 @@ import '../../../domain/repositories/product_repo.dart';
 import '../../../domain/usecases/view_all_products_usecase.dart';
 import 'home_event.dart';
 import 'home_state.dart';
-import 'package:http/http.dart' as http;
 
-
-
-// final httpClient = http.Client(); 
-// final sharedPreferences = await SharedPreferences.getInstance(); 
-
-// final productRemoteDatasource = ProductRemoteDatasourceImpl(client: httpClient);
-// final productLocalDatasource = ProductLocalDatasourceImp(sharedPreferences: sharedPreferences);
-// final networkInfo = NetworkInfoImpl(InternetConnectionChecker());
-
-// final productRepo = ProductRepoImp(
-//   productRemoteDatasource: productRemoteDatasource,
-//   productLocalDatasource: productLocalDatasource,
-//   networkInfo: networkInfo,
-// );
-
-
-// final viewAllProductsUsecase = ViewAllProductsUsecase(productRepo);
 
 
 

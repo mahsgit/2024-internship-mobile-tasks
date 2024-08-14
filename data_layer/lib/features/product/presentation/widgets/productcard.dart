@@ -10,7 +10,6 @@ import '../../domain/entities/product.dart';
 
 
 
-  final  File defaultimage=File('images/image.png');
 class ProductCard extends StatelessWidget {
   
   final List<Product> products;
@@ -24,12 +23,12 @@ class ProductCard extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) => Detail(
+                productId:product.id,
                 productName: product.name,
                 productCategory: product.category,
                 productPrice: product.price,
                 productRating: product.rating,
                 productImage: product.imageUrl,
-                // productImagefile: product.Image,
                 productDescription: product.description,
               ),
             ),
@@ -50,6 +49,8 @@ class ProductCard extends StatelessWidget {
                       height: 150,
                       width: double.infinity,
                     ),
+
+                    
                 
               // product.Image != null
               //     ? Image.file(
