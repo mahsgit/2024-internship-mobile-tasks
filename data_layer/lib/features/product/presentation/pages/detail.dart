@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task6/features/product/presentation/widgets/horizontalscrol.dart';
 
+import '../../../../main.dart';
 import '../bloc/addbloc/add_bloc.dart';
 import '../bloc/addbloc/add_bloc_event.dart';
 import '../bloc/addbloc/add_bloc_state.dart';
@@ -28,9 +29,6 @@ class Detail extends StatelessWidget {
     required this.productImage,
     required this.productDescription,
   });
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -139,31 +137,43 @@ class Detail extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BlocBuilder<DeleteBloc, AddBlocState>(
+                  BlocConsumer<DeleteBloc, AddBlocState>(
+                    listener: (context, state) {
+                      if (state is SubmissionSuccess) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => RootApp()),
+                        );
+                      } else if (state is SubmissionFailure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Failed to delete")),
+                        );
+                      }
+                    },
                     builder: (context, state) {
                       return OutlinedButton(
-                                      onPressed: () {
-                                        context.read<DeleteBloc>().add(DeleteData(id: productId));
-                                       
-                                      },
-                                      child: Text(
-                                        "Delete",
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        minimumSize: Size(150, 50),
-                                        side: BorderSide(
-                                          color: Colors.red,
-                                          width: 2,
-                                        ),
-                                      ),
-                                    );
+                        onPressed: () {
+                          context
+                              .read<DeleteBloc>()
+                              .add(DeleteData(id: productId));
+                        },
+                        child: Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          minimumSize: Size(150, 50),
+                          side: BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                        ),
+                      );
                     },
                   ),
                   SizedBox(width: 60),

@@ -1,17 +1,18 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../domain/entities/product.dart';
 import '../../../domain/usecases/create_product_usecase.dart';
 import '../../../domain/usecases/delete_product_usecase.dart';
 import '../../../domain/usecases/update_product_usecase.dart';
+import '../homebloc/home_block.dart';
+import '../homebloc/home_event.dart';
 import 'add_bloc_event.dart';
 import 'add_bloc_state.dart';
-import 'package:uuid/uuid.dart';
 
 class AddBloc extends Bloc<AddBlocEvent, AddBlocState> {
   CreateProductUsecase createProductUsecase;
-  AddBloc({required this.createProductUsecase}) : super(SubmissionInitial()) {
+  HomeBlock homeBlock;
+  AddBloc({required this.createProductUsecase, required this.homeBlock})
+      : super(SubmissionInitial()) {
     on<AddData>((event, emit) async {
       emit(SubmitionLoading());
       try {
@@ -24,23 +25,25 @@ class AddBloc extends Bloc<AddBlocEvent, AddBlocState> {
           imageUrl: event.imagePath,
         );
         final result = await createProductUsecase(product);
-        result.fold(
-          (failure) => emit(SubmissionFailure(failure.message)),
-          (product) => emit(SubmissionSuccess(product)),
-        );
+        result.fold((failure) => emit(SubmissionFailure(failure.message)),
+            (product) {
+          print(product.id);
+          emit(SubmissionSuccess(product));
+          homeBlock.add(FetchData());
+        });
       } catch (e, stackTrace) {
-        print('Exception: $e');
-        print('Stack trace: $stackTrace');
         emit(SubmissionFailure("Failed to add product"));
       }
     });
   }
 }
 
-
 class UpdateBloc extends Bloc<AddBlocEvent, AddBlocState> {
   UpdateProductUsecase updateProductUsecase;
-  UpdateBloc({required this.updateProductUsecase}) : super(SubmissionInitial()) {
+  HomeBlock homeBlock;
+
+  UpdateBloc({required this.updateProductUsecase, required this.homeBlock})
+      : super(SubmissionInitial()) {
     on<AddData>((event, emit) async {
       emit(SubmitionLoading());
       try {
@@ -54,9 +57,9 @@ class UpdateBloc extends Bloc<AddBlocEvent, AddBlocState> {
         );
         final result = await updateProductUsecase(product);
         result.fold(
-          (failure) => emit(SubmissionFailure(failure.message)),
-          (product) => emit(SubmissionSuccess(product)),
-        );
+            (failure) => emit(SubmissionFailure(failure.message)),
+            (product) =>
+                {emit(SubmissionSuccess(product)), homeBlock.add(FetchData())});
       } catch (e, stackTrace) {
         print('Exception: $e');
         print('Stack trace: $stackTrace');
@@ -66,22 +69,22 @@ class UpdateBloc extends Bloc<AddBlocEvent, AddBlocState> {
   }
 }
 
-
-
-
 class DeleteBloc extends Bloc<AddBlocEvent, AddBlocState> {
   DeleteProductUsecase deleteProductUsecase;
-  DeleteBloc({required this.deleteProductUsecase}) : super(SubmissionInitial()) {
+  HomeBlock homeBlock;
+  DeleteBloc({required this.deleteProductUsecase, required this.homeBlock})
+      : super(SubmissionInitial()) {
     on<DeleteData>((event, emit) async {
       emit(SubmitionLoading());
       try {
-        final Deleteparam id= Deleteparam(event.id);
-        
+        final Deleteparam id = Deleteparam(event.id);
+
         final result = await deleteProductUsecase(id);
         // result.fold(
         //   (failure) => emit(SubmissionFailure(failure.message)),
         //   (success) => emit(SubmissionSuccess(success)),
         // );
+        homeBlock.add(FetchData());
       } catch (e, stackTrace) {
         print('Exception: $e');
         print('Stack trace: $stackTrace');

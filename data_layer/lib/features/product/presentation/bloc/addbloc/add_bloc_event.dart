@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 abstract class AddBlocEvent {}
 
 class AddData extends AddBlocEvent {
@@ -18,7 +20,7 @@ class AddData extends AddBlocEvent {
   });
 }
 
-class DeleteData extends AddBlocEvent{
+class DeleteData extends AddBlocEvent {
   final String id;
   DeleteData({required this.id});
 }

@@ -1,11 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
-import 'features/product/presentation/bloc/addbloc/add_bloc_state.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
 import 'features/product/presentation/bloc/homebloc/home_event.dart';
 import 'features/product/presentation/bloc/homebloc/home_state.dart';
@@ -13,7 +8,6 @@ import 'features/product/presentation/pages/crudpage.dart';
 import 'features/product/presentation/pages/search.dart';
 import 'features/product/presentation/widgets/popups.dart';
 import 'features/product/presentation/widgets/productcard.dart';
-import 'features/product/presentation/widgets/productmodel.dart';
 import 'DI.dart';
 
 void main() async {
@@ -48,7 +42,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const RootApp(),
-        '/search': (context) => const RootApp(),
+        '/search': (context) => const Search(),
         '/crudepage': (context) => const Crudpage(),
       },
     );
@@ -149,7 +143,7 @@ class _RootAppState extends State<RootApp> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RootApp()),
+                                builder: (context) => const Search()),
                           );
                         },
                         child: Icon(

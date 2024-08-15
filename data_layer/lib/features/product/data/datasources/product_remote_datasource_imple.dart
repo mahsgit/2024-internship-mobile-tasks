@@ -99,6 +99,7 @@ class ProductRemoteDatasourceImpl extends ProductRemoteDatasource {
     }
   }
 
+
   @override
   Future<ProductModel> displaySingleProduct(String id) async {
     final response = await client.get(Uri.parse(Urls.displaySingleProductUrl(id)));

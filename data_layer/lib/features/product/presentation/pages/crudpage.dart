@@ -92,7 +92,7 @@ class _CrudpageState extends State<Crudpage> {
       } else {
         context.read<AddBloc>().add(AddData(
             id: Uuid().v4(),
-            name: name,
+            name: name, 
             category: category,
             price: price,
             description: description,

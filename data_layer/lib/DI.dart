@@ -42,9 +42,12 @@ Future<void> setup() async {
   getIt.registerSingleton<CreateProductUsecase>(CreateProductUsecase(getIt()));
   getIt
       .registerSingleton<HomeBlock>(HomeBlock(viewAllProductsUsecase: getIt()));
-  getIt.registerSingleton<AddBloc>(AddBloc(createProductUsecase: getIt()));
+  getIt.registerSingleton<AddBloc>(AddBloc(
+    createProductUsecase: getIt(),
+    homeBlock: getIt<HomeBlock>(),
+  ));
   getIt
-      .registerSingleton<UpdateBloc>(UpdateBloc(updateProductUsecase: getIt()));
+      .registerSingleton<UpdateBloc>(UpdateBloc(updateProductUsecase: getIt(),homeBlock: getIt<HomeBlock>(),));
   getIt
-      .registerSingleton<DeleteBloc>(DeleteBloc(deleteProductUsecase: getIt()));
+      .registerSingleton<DeleteBloc>(DeleteBloc(deleteProductUsecase: getIt(),homeBlock: getIt<HomeBlock>(),));
 }
