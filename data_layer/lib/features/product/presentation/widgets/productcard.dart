@@ -18,19 +18,12 @@ class ProductCard extends StatelessWidget {
 
   List<Widget> _buildCard(BuildContext context) {
     return products.map((product) {
+      // for each product make the gustured wrapped widget
       return GestureDetector(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => Detail(
-                productId:product.id,
-                productName: product.name,
-                productCategory: product.category,
-                productPrice: product.price,
-                productRating: product.rating,
-                productImage: product.imageUrl,
-                productDescription: product.description,
-              ),
+              builder: (BuildContext context) => Detail(productdetail:product ),
             ),
           );
         },
@@ -50,21 +43,7 @@ class ProductCard extends StatelessWidget {
                       width: double.infinity,
                     ),
 
-                    
-                
-              // product.Image != null
-              //     ? Image.file(
-              //         product.Image!,
-              //         fit: BoxFit.cover,
-              //         height: 150,
-              //         width: double.infinity,
-              //       )
-              //     : Image.asset(
-              //         product.image,
-              //         fit: BoxFit.cover,
-              //         height: 150,
-              //         width: double.infinity,
-              //       ),
+      
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
@@ -80,7 +59,10 @@ class ProductCard extends StatelessWidget {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                           ),
+
                         ),
+
+                        //change it to 2 decimal degit 25.00
                         Text("\$${product.price.toStringAsFixed(2)}"),
                       ],
                     ),
@@ -109,15 +91,19 @@ class ProductCard extends StatelessWidget {
           ),
         ),
       );
-    }).toList();
+
+      
+    }).toList();// it return list of widgets
   }
 
   @override
   Widget build(BuildContext context) {
     return GridView.count(
+      // one item per row so 1 column
       crossAxisCount: 1,
       childAspectRatio: 10 / 7,
       padding: EdgeInsets.symmetric(vertical: 8),
+      // call the list or product we build in _buildCard method
       children: _buildCard(context),
     );
   }

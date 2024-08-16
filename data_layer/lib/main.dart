@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
 import 'features/product/presentation/bloc/homebloc/home_event.dart';
 import 'features/product/presentation/bloc/homebloc/home_state.dart';
+import 'features/product/presentation/bloc/search_bloc/search_bloc.dart';
+import 'features/product/presentation/bloc/search_bloc/search_bloc_event.dart';
 import 'features/product/presentation/pages/crudpage.dart';
 import 'features/product/presentation/pages/search.dart';
 import 'features/product/presentation/widgets/popups.dart';
 import 'features/product/presentation/widgets/productcard.dart';
-import 'DI.dart';
+import 'core/DI.dart';
 
 void main() async {
+  // if dependecy or asynchrones event ......
+  // are in our code we have to initialize by telling flutter befor run the app
   WidgetsFlutterBinding.ensureInitialized();
+  // onet time setup i initialized it in DI.dart
   await setup();
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
+        // create widgets contex and pass to it children this case myapp so myapp can
+        //access to the context of all bloc through produvider widget
+        // it will get homblock instance from getit and
+        // add or call fetchdata event from the homeblock
+
         create: (context) => getIt.get<HomeBlock>()..add(FetchData()),
       ),
       BlocProvider(
@@ -24,11 +36,14 @@ void main() async {
       BlocProvider(
         create: (context) => getIt.get<UpdateBloc>(),
       ),
-       BlocProvider(
+      BlocProvider(
         create: (context) => getIt.get<DeleteBloc>(),
       ),
+      BlocProvider(
+        create: (context) => SearchBloc(),
+      ),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
@@ -36,6 +51,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
+  // context is like mapp where flutter seach widget in widget try and check if it can use its context
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -58,11 +74,13 @@ class RootApp extends StatefulWidget {
 
 class _RootAppState extends State<RootApp> {
   @override
+  //build is like build the ui here using the context as search widget
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Row(
             children: [
+              // round the child like image , container ... with circular boarder ==ClipRRect
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Container(
@@ -118,9 +136,21 @@ class _RootAppState extends State<RootApp> {
             ),
           ],
         ),
+        // this widget listen  to state change and update the UI according to HomeBloc logic
+        // now the fechdata event is triggered in the upper provider part the state is either succes or fail
+        // we can also use this method to trigger the fetch event with out button ....
+
+        //  void initState() {
+        //       super.initState();
+        //       context.read<HomeBlock>().add(FetchData());
+        //     }
+
+        // or we can also do it like this when creating provider === create: (context) => getIt.get<HomeBlock>()..add(FetchData()),
         body: BlocBuilder<HomeBlock, HomeState>(builder: (context, state) {
           if (state is FetchLoading) {
-            return Text("Loading...");
+            return Center(
+                child: LoadingAnimationWidget.newtonCradle(
+                    color: Colors.black, size: 440));
           } else if (state is FetchFailure) {
             return Text(state.error);
           } else if (state is FetchSuccess) {
@@ -128,7 +158,6 @@ class _RootAppState extends State<RootApp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  // padding: const EdgeInsets.all(30.0),
                   padding: EdgeInsets.fromLTRB(35, 30, 35, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,11 +169,12 @@ class _RootAppState extends State<RootApp> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Search()),
-                          );
+                          context
+                              .read<SearchBloc>()
+                              .add(HoldDataEvent(state.product));
+                          // context.read<SearchBloc>().emit(TEST(state.product));
+
+                          Navigator.pushNamed(context, '/search');
                         },
                         child: Icon(
                           Icons.search,
@@ -154,6 +184,7 @@ class _RootAppState extends State<RootApp> {
                     ],
                   ),
                 ),
+                // refere to fill the remaining place whith the child i provid you , strech
                 Expanded(
                   child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -171,17 +202,7 @@ class _RootAppState extends State<RootApp> {
           child: FloatingActionButton(
             shape: const CircleBorder(),
             onPressed: () {
-              Navigator.of(context).push(PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const Crudpage(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return RotationTransition(
-                    turns: animation,
-                    child: child,
-                  );
-                },
-              ));
+              Navigator.pushNamed(context, '/crudepage');
             },
             backgroundColor: Color(0xFF3F51F3),
             child: const Icon(

@@ -4,7 +4,9 @@ import '../../../domain/usecases/view_all_products_usecase.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
-
+// it will write logice on how the state should change and what event triggered it
+// and  HomeState changes, according to the logic defined in the HomeBlock.
+// the blockwidget like blockbuilder lisner .. listn to the state change do logic in other pagesssssss
 
 
 class HomeBlock extends Bloc<HomeEvent,HomeState>{

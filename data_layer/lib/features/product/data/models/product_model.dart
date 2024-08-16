@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:task6/features/product/domain/entities/product.dart';
 
 class ProductModel extends Product {

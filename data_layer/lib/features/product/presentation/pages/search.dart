@@ -9,6 +9,9 @@ import 'package:task6/features/product/presentation/widgets/productcard.dart';
 import 'package:task6/features/product/presentation/widgets/productmodel.dart';
 import '../bloc/homebloc/home_block.dart';
 import '../bloc/homebloc/home_state.dart';
+import '../bloc/search_bloc/search_bloc.dart';
+import '../bloc/search_bloc/search_bloc_event.dart';
+import '../bloc/search_bloc/search_bloc_state.dart';
 import '../widgets/horizontalscrol.dart';
 
 class Search extends StatefulWidget {
@@ -73,14 +76,18 @@ class _SearchState extends State<Search> {
                               ))),
                     ],
                   ),
-                  BlocBuilder<HomeBlock, HomeState>(builder: (context, state) {
-                    if (state is FetchLoading) {
-                      return (Text("loadint"));
-                    } else if (state is FetchFailure) {
-                      return (Text("failed to fetch"));
-                    } else if (state is FetchSuccess) {
+                  BlocBuilder<SearchBloc, SearchBlocState>(
+                      builder: (context, state) {
+                    if (state is Initial) {
                       return Expanded(
-                        child: ProductCard(products: state.product),
+                        child: ProductCard(products: state.feachedstate),
+                      );
+                    } else if (state is FailSearch) {
+                      return (Text("failed to fetch"));
+                    }
+                     else if (state is SuccesSearchState) {
+                      return Expanded(
+                        child: ProductCard(products: state.searchproducts),
                       );
                     }
                     return (Text("ERROR MAY BE "));
@@ -105,6 +112,20 @@ class bottomfilter extends StatefulWidget {
 class _bottomfilterState extends State<bottomfilter> {
   double _minpriceValue = 0;
   double _maxpriceValue = 500;
+  final TextEditingController _searchNameController = TextEditingController();
+
+  void _searchFunc() {
+    final searchTerm = _searchNameController.text.trim();
+    if (searchTerm.isNotEmpty) {
+      print("send");
+      context.read<SearchBloc>().add(FetchSearchData(name: searchTerm));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('enter name to filter '),
+      ));
+    }
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,13 +138,14 @@ class _bottomfilterState extends State<bottomfilter> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Category",
+              "Name ",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Container(
               width: 300,
               height: 50,
               child: TextFormField(
+                controller: _searchNameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -157,7 +179,9 @@ class _bottomfilterState extends State<bottomfilter> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/');
+                    _searchFunc();
+
+                    // Navigator.pushNamed(context, '/');
                   },
                   child: Text(
                     "Apply",

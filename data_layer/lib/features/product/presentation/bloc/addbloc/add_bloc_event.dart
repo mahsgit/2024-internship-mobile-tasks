@@ -1,8 +1,15 @@
-import 'package:flutter/widgets.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AddBlocEvent {}
+// Base class for all product-related events
+abstract class ProductEvent extends Equatable {
+  const ProductEvent();
 
-class AddData extends AddBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+// Event for adding a product
+class AddData extends ProductEvent {
   final String id;
   final String name;
   final String category;
@@ -10,7 +17,7 @@ class AddData extends AddBlocEvent {
   final String description;
   final String imagePath;
 
-  AddData({
+  const AddData({
     required this.id,
     required this.name,
     required this.category,
@@ -18,70 +25,18 @@ class AddData extends AddBlocEvent {
     required this.description,
     required this.imagePath,
   });
+
+  @override
+  List<Object> get props => [id, name, category, price, description, imagePath];
 }
 
-class DeleteData extends AddBlocEvent {
+
+// Event for deleting a product
+class DeleteData extends ProductEvent {
   final String id;
-  DeleteData({required this.id});
+
+  const DeleteData({required this.id});
+
+  @override
+  List<Object> get props => [id];
 }
-
-
-
-
-
-
-// import 'package:equatable/equatable.dart';
-
-// abstract class AddBlocEvent extends Equatable {
-//   const AddBlocEvent();
-
-//   @override
-//   List<Object> get props => [];
-// }
-
-// class NameChanged extends AddBlocEvent {
-//   final String name;
-
-//   const NameChanged(this.name);
-
-//   @override
-//   List<Object> get props => [name];
-// }
-
-// class CategoryChanged extends AddBlocEvent {
-//   final String  category;
-
-//   const CategoryChanged(this.category);
-
-//   @override
-//   List<Object> get props => [category];
-// }
-
-// class PriceChanged extends AddBlocEvent {
-//   final String price;
-
-//   const PriceChanged(this.price);
-
-//   @override
-//   List<Object> get props => [price];
-// }
-
-// class DescriptionChanged extends AddBlocEvent {
-//   final String description;
-
-//   const DescriptionChanged(this.description);
-
-//   @override
-//   List<Object> get props => [description];
-// }
-
-// class ImagePicked extends AddBlocEvent {
-//   final String imagePath;
-
-//   const ImagePicked(this.imagePath);
-
-//   @override
-//   List<Object> get props => [imagePath];
-// }
-
-// class FormSubmitted extends AddBlocEvent {}

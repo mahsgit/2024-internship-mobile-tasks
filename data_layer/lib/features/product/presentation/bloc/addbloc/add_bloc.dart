@@ -8,14 +8,17 @@ import '../homebloc/home_event.dart';
 import 'add_bloc_event.dart';
 import 'add_bloc_state.dart';
 
-class AddBloc extends Bloc<AddBlocEvent, AddBlocState> {
+
+class AddBloc extends Bloc<ProductEvent, AddBlocState> {
   CreateProductUsecase createProductUsecase;
   HomeBlock homeBlock;
   AddBloc({required this.createProductUsecase, required this.homeBlock})
       : super(SubmissionInitial()) {
+        // handling AddData event and emit state that the builder wait 
     on<AddData>((event, emit) async {
       emit(SubmitionLoading());
       try {
+        // here we create prdocut object and encapsulate all the attribute and change it to product
         final product = Product(
           id: event.id,
           name: event.name,
@@ -27,7 +30,6 @@ class AddBloc extends Bloc<AddBlocEvent, AddBlocState> {
         final result = await createProductUsecase(product);
         result.fold((failure) => emit(SubmissionFailure(failure.message)),
             (product) {
-          print(product.id);
           emit(SubmissionSuccess(product));
           homeBlock.add(FetchData());
         });
@@ -38,7 +40,7 @@ class AddBloc extends Bloc<AddBlocEvent, AddBlocState> {
   }
 }
 
-class UpdateBloc extends Bloc<AddBlocEvent, AddBlocState> {
+class UpdateBloc extends Bloc<ProductEvent, AddBlocState> {
   UpdateProductUsecase updateProductUsecase;
   HomeBlock homeBlock;
 
@@ -69,7 +71,7 @@ class UpdateBloc extends Bloc<AddBlocEvent, AddBlocState> {
   }
 }
 
-class DeleteBloc extends Bloc<AddBlocEvent, AddBlocState> {
+class DeleteBloc extends Bloc<ProductEvent, AddBlocState> {
   DeleteProductUsecase deleteProductUsecase;
   HomeBlock homeBlock;
   DeleteBloc({required this.deleteProductUsecase, required this.homeBlock})
@@ -82,7 +84,7 @@ class DeleteBloc extends Bloc<AddBlocEvent, AddBlocState> {
         final result = await deleteProductUsecase(id);
         // result.fold(
         //   (failure) => emit(SubmissionFailure(failure.message)),
-        //   (success) => emit(SubmissionSuccess(success)),
+        //   (success) => emit(SubmissionSuccess(result)),
         // );
         homeBlock.add(FetchData());
       } catch (e, stackTrace) {

@@ -69,24 +69,6 @@ class ProductRemoteDatasourceImpl extends ProductRemoteDatasource {
 
   }
 
-
-  // Future<ProductModel> addProduct(ProductModel product) async {
-  //   final response = await client.post(
-  //     Uri.parse(Urls.addProductUrl()),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: json.encode(product.toJson()),
-  //   );
-
-  //   // the above is sending the product to api by converting it to json 
-  //   // the code below is reciving respons from api then converig it to dart
-
-  //   if (response.statusCode == 201) {
-  //     return ProductModel.fromJson(json.decode(response.body));
-  //   } else {
-  //     throw Exception('Failed to add product');
-  //   }
-  // }
-
   @override
   Future<List<ProductModel>> displayAllProducts() async {
     final response = await client.get(Uri.parse(Urls.displayAllProductsUrl()));

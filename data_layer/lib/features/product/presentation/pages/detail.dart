@@ -5,30 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task6/features/product/presentation/widgets/horizontalscrol.dart';
 
 import '../../../../main.dart';
+import '../../domain/entities/product.dart';
 import '../bloc/addbloc/add_bloc.dart';
 import '../bloc/addbloc/add_bloc_event.dart';
 import '../bloc/addbloc/add_bloc_state.dart';
 import 'crudpage.dart';
 
 class Detail extends StatelessWidget {
-  final String productId;
-  final String productName;
-  final String productCategory;
-  final double productPrice;
-  final double productRating;
-  final String productImage;
-  final String productDescription;
+  final Product productdetail;
 
-  const Detail({
-    super.key,
-    required this.productId,
-    required this.productName,
-    required this.productCategory,
-    required this.productPrice,
-    required this.productRating,
-    required this.productImage,
-    required this.productDescription,
-  });
+   const Detail({ super.key ,required this.productdetail});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +31,7 @@ class Detail extends StatelessWidget {
                     height: 200,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(productImage),
+                        image: NetworkImage(productdetail.imageUrl),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -62,7 +48,7 @@ class Detail extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_ios_rounded,
                         size: 20,
                         color: Color(0xFF3F51F3),
@@ -83,14 +69,14 @@ class Detail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    productCategory,
+                    productdetail.category,
                     style: TextStyle(color: Colors.grey),
                   ),
                   Row(
                     children: [
                       Icon(Icons.star, color: Colors.yellow),
                       Text(
-                        "(${productRating.toString()})",
+                        "(${productdetail.rating.toString()})",
                         style: TextStyle(color: Colors.grey),
                       )
                     ],
@@ -105,16 +91,16 @@ class Detail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    productName,
+                    productdetail.name,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Text("\$${productPrice.toStringAsFixed(2)}"),
+                  Text("\$${productdetail.price.toStringAsFixed(2)}"),
                 ],
               ),
             ),
             SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 30, 5),
+           const  Padding(
+              padding:  EdgeInsets.fromLTRB(30, 0, 30, 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -129,7 +115,7 @@ class Detail extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(20),
               child: Text(
-                productDescription,
+                productdetail.description,
               ),
             ),
             Padding(
@@ -140,9 +126,11 @@ class Detail extends StatelessWidget {
                   BlocConsumer<DeleteBloc, AddBlocState>(
                     listener: (context, state) {
                       if (state is SubmissionSuccess) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => RootApp()),
+ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("success fully deleted")),
                         );
+
+                       
                       } else if (state is SubmissionFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Failed to delete")),
@@ -154,23 +142,25 @@ class Detail extends StatelessWidget {
                         onPressed: () {
                           context
                               .read<DeleteBloc>()
-                              .add(DeleteData(id: productId));
+                              .add(DeleteData(id: productdetail.id));
+                        Navigator.pushNamed(context, '/');
+
                         },
-                        child: Text(
-                          "Delete",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 15,
-                          ),
-                        ),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                           minimumSize: Size(150, 50),
-                          side: BorderSide(
+                          side: const BorderSide(
                             color: Colors.red,
                             width: 2,
+                          ),
+                        ),
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
                           ),
                         ),
                       );
@@ -182,15 +172,7 @@ class Detail extends StatelessWidget {
                       {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => Crudpage(
-                              productId: productId,
-                              productName: productName,
-                              productCategory: productCategory,
-                              productPrice: productPrice,
-                              productRating: productRating,
-                              productImage: productImage,
-                              productDescription: productDescription,
-                            ),
+                            builder: (context) => Crudpage(productcrud:productdetail),
                           ),
                         );
                       }
