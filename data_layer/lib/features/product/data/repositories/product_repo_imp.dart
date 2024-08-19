@@ -112,4 +112,5 @@ if (await networkInfo.isconnected){
       return Left(ServerFailure("server failure"));}
     }else{
       return const Left(NetworkFailure());
-    }}} 
+    }
+    }} 
