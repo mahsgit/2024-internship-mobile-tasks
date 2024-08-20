@@ -7,24 +7,22 @@ import '../bloc/user_bloc_event.dart';
 import '../bloc/user_bloc_state.dart';
 import '../widget/textfield.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class Signin extends StatefulWidget {
+  const Signin({Key? key}) : super(key: key);
 
   @override
-  _SignupState createState() => _SignupState();
+  _SigninState createState() => _SigninState();
 }
 
-class _SignupState extends State<Signup> {
-  final TextEditingController namecontroller = TextEditingController();
-  final TextEditingController emailcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
+class _SigninState extends State<Signin> {
+  final TextEditingController emailcontrollerin = TextEditingController();
+  final TextEditingController passwordcontrollerin = TextEditingController();
 
-  Future<void> senddata(BuildContext context) async {
-    final name = namecontroller.text;
-    final email = emailcontroller.text;
-    final password = passwordcontroller.text;
-
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+  void signinfunc(BuildContext context) async {
+    final email = emailcontrollerin.text;
+    final password = passwordcontrollerin.text;
+    
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please fill in all fields.'),
@@ -32,8 +30,7 @@ class _SignupState extends State<Signup> {
         ),
       );
     } else {
-      context.read<SighUpBloc>().add(Signupevent(
-            name: name,
+      context.read<SignInBloc>().add(Signinevent(
             email: email,
             password: password,
           ));
@@ -44,22 +41,21 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign up'),
+        title: Text('Sign In'),
       ),
-      body: BlocListener<SighUpBloc, UserBlocState>(
+      body: BlocListener<SignInBloc, UserBlocState>(
         listener: (context, state) {
-         if (state is UserSuccess) {
+           if (state is UserSuccesslogin) {
   Navigator.pushReplacement(
     context,
     MaterialPageRoute(
       builder: (context) => RootApp(),
     ),
   );
-}
- else if (state is UserFailure) {
+} else if (state is UserFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("Signup failed. Please try again."),
+                content: Text("Sign In failed. Please try again."),
                 backgroundColor: Colors.red,
               ),
             );
@@ -70,24 +66,19 @@ class _SignupState extends State<Signup> {
           children: [
             SizedBox(height: 30),
             CustemText(
-              labelText: 'Name',
-              controller: namecontroller,
-            ),
-            SizedBox(height: 30),
-            CustemText(
               labelText: 'Email',
-              controller: emailcontroller,
+              controller: emailcontrollerin,
             ),
             SizedBox(height: 30),
             CustemText(
               labelText: 'Password',
-              controller: passwordcontroller,
+              controller: passwordcontrollerin,
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () => senddata(context),
+              onPressed: () => signinfunc(context),
               child: Text(
-                "Sign up",
+                "Sign In",
                 style: TextStyle(color: Colors.white, fontSize: 17),
               ),
               style: ElevatedButton.styleFrom(
@@ -98,11 +89,10 @@ class _SignupState extends State<Signup> {
                 backgroundColor: Color(0xFF3F51F3),
               ),
             ),
-            SizedBox(height: 30,),
+             SizedBox(height: 30,),
             TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/signin'),
-              child: Text('Already have an account? Sign in'),)
-
+              onPressed: () => Navigator.pushNamed(context, '/signup'),
+              child: Text('You dont have an account? Sign up'),)
           ],
         ),
       ),

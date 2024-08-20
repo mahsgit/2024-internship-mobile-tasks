@@ -47,12 +47,12 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
     final response = await client.post(
       Uri.parse(apiUrl),
       headers: {
-        'Content-Type': 'application/json', // Added Content-Type header
+        'Content-Type': 'application/json', 
       },
       body: body,
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final data = json.decode(response.body);
       final token = data['data']['access_token'];
 

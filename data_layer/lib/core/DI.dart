@@ -7,6 +7,7 @@ import '../features/login_and_registration/data/data_source/localtoken.dart';
 import '../features/login_and_registration/data/data_source/userremotedatasource.dart';
 import '../features/login_and_registration/data/repositories/userrepoimp.dart';
 import '../features/login_and_registration/domain/repository/user_repo.dart';
+import '../features/login_and_registration/domain/usecases/signinusecase.dart';
 import '../features/login_and_registration/domain/usecases/signupusecase.dart';
 import '../features/login_and_registration/presentation/bloc/user+bloc.dart';
 import '../features/product/presentation/bloc/search_bloc/search_bloc.dart';
@@ -56,6 +57,7 @@ Future<void> setup() async {
       networkInfo: getIt()));
 
   getIt.registerSingleton<Signupusecase>(Signupusecase(getIt()));
+   getIt.registerSingleton<SigninUsecase>(SigninUsecase(getIt()));
 
   getIt.registerSingleton<ViewAllProductsUsecase>(
       ViewAllProductsUsecase(getIt()));
@@ -83,5 +85,8 @@ Future<void> setup() async {
 
   getIt.registerSingleton<SighUpBloc>(SighUpBloc(
     signupusecase: getIt(),
+  ));
+   getIt.registerSingleton<SignInBloc>(SignInBloc(
+    signinusecase: getIt(),
   ));
 }

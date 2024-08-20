@@ -23,14 +23,14 @@ class Userrepoimp extends UserRepo {
   });
 
   @override
-  Future<Either<Failure, Userentity>> signin_repo(
+  Future<Either<Failure, String>> signin_repo(
       String email, String password) async {
     if (await networkInfo.isconnected) {
       try {
         final resulttoken =
             await userRemoteDatasource.authenticateuser(email, password);
         final result = await localToken.saveToken(resulttoken as String);
-        return Right(resulttoken as Userentity);
+        return Right(resulttoken);
       } on ServerException {
         return const Left(ServerFailure("An error has occured"));
       } on SocketException {

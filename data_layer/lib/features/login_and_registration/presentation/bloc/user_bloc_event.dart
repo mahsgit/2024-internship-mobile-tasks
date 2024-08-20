@@ -1,4 +1,5 @@
 abstract class UserBlocEvent{}
+class InitialEvent extends UserBlocEvent{}
 
 class Signupevent extends UserBlocEvent{
   final String email;
@@ -11,4 +12,11 @@ class Signupevent extends UserBlocEvent{
 
 }
 
-class InitialEvent extends UserBlocEvent{}
+class Signinevent extends UserBlocEvent{
+  final String email;
+  final String password;
+  Signinevent({
+    required this.email,
+    required this.password});
+
+}

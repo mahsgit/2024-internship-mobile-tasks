@@ -3,6 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../login_and_registration/domain/entities/userEntity.dart';
+import '../../../login_and_registration/presentation/bloc/user+bloc.dart';
+import '../../../login_and_registration/presentation/bloc/user_bloc_state.dart';
 import '../bloc/homebloc/home_block.dart';
 import '../bloc/homebloc/home_state.dart';
 import '../bloc/search_bloc/search_bloc.dart';
@@ -11,7 +14,9 @@ import '../widgets/popups.dart';
 import '../widgets/productcard.dart';
 
 class RootApp extends StatefulWidget {
-  const RootApp({super.key});
+  
+  
+  const RootApp();
 
   @override
   State<RootApp> createState() => _RootAppState();
@@ -22,47 +27,51 @@ class _RootAppState extends State<RootApp> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              // round the child like image , container ... with circular boarder ==ClipRRect
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  color: Color.fromARGB(255, 210, 208, 208),
-                ),
-              ),
-              SizedBox(width: 10),
-              const Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "July 14, 2023",
-                        style: TextStyle(
-                          fontFamily: 'Syne',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: Color(0xFFAAAAAA),
-                        ),
-                      ),
-                      Text(
-                        "Hello, Yohannes",
-                        style: TextStyle(
-                          fontFamily: 'Sora',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+          title: BlocBuilder<SighUpBloc, UserBlocState>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  // round the child like image , container ... with circular boarder ==ClipRRect
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      color: Color.fromARGB(255, 210, 208, 208),
+                    ),
                   ),
-                ),
-              ),
-            ],
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "July 14, 2023",
+                            style: TextStyle(
+                              fontFamily: 'Syne',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color(0xFFAAAAAA),
+                            ),
+                          ),
+                          Text(
+                            "Yohannes",
+                            style: TextStyle(
+                              fontFamily: 'Sora',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           actions: [
             Container(
@@ -90,10 +99,7 @@ class _RootAppState extends State<RootApp> {
         //     }
 
         // or we can also do it like this when creating provider === create: (context) => getIt.get<HomeBlock>()..add(FetchData()),
-        body:
-
-        BlocBuilder<HomeBlock, HomeState>(builder: (context, state) {
-
+        body: BlocBuilder<HomeBlock, HomeState>(builder: (context, state) {
           if (state is FetchLoading) {
             return Center(
                 child: LoadingAnimationWidget.newtonCradle(
@@ -141,9 +147,7 @@ class _RootAppState extends State<RootApp> {
             );
           }
           return Text("Hello I am just opening");
-        }
-        ),
-
+        }),
 
         // body: Signup(),
         floatingActionButton: Container(
@@ -164,4 +168,4 @@ class _RootAppState extends State<RootApp> {
           ),
         ));
   }
-  }
+}

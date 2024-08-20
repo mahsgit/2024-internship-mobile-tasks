@@ -12,3 +12,7 @@ class UserFailure extends UserBlocState{
   final String error;
   UserFailure(this.error);
 }
+class UserSuccesslogin extends UserBlocState{
+  final String userlogged;
+  UserSuccesslogin(this.userlogged);
+}

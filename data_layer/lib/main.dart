@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'features/login_and_registration/domain/entities/userEntity.dart';
 import 'features/login_and_registration/domain/usecases/signupusecase.dart';
 import 'features/login_and_registration/presentation/bloc/user+bloc.dart';
 import 'features/login_and_registration/presentation/bloc/user_bloc_event.dart';
 import 'features/login_and_registration/presentation/bloc/user_bloc_state.dart';
+import 'features/login_and_registration/presentation/page/signin.dart';
 import 'features/login_and_registration/presentation/page/signup.dart';
 import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
@@ -46,7 +48,10 @@ void main() async {
         create: (context) => getIt.get<DeleteBloc>(),
       ),
       BlocProvider(
-        create: (context) => getIt.get<SighUpBloc>()..add(InitialEvent()),
+        create: (context) => getIt.get<SighUpBloc>()
+      ),
+       BlocProvider(
+        create: (context) => getIt.get<SignInBloc>()
       ),
       BlocProvider(
         create: (context) => SearchBloc(),
@@ -65,12 +70,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/signup',
       routes: {
-        '/': (context) => const RootApp(),
+        '/': (context) => RootApp(),
         '/search': (context) => const Search(),
         '/crudepage': (context) => const Crudpage(),
         '/signup': (context) => const Signup(),
+        '/signin': (context) => const Signin(),
       },
     );
   }
 }
-
