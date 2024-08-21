@@ -103,7 +103,7 @@ class _CrudpageState extends State<Crudpage> {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('successfully added'),
                   ));
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushReplacementNamed(context, '/');
                 } else if (state is SubmissionFailure) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error)),
@@ -117,7 +117,7 @@ class _CrudpageState extends State<Crudpage> {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('successfully updated'),
                   ));
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushReplacementNamed(context, '/');
                 } else if (state is SubmissionFailure) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error)),

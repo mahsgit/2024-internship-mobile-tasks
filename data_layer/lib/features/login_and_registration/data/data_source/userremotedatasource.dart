@@ -5,8 +5,8 @@ import '../model/usermodel.dart';
 
 abstract class UserRemoteDatasource {
   Future<Usermodel> adduser(Usermodel userEntity);
-  Future<String> authenticateuser(
-      String email, String password); // Changed return type to String
+  Future<Usermodel> getmeremote(String token);
+  Future<String> authenticateuser(String email, String password);
 }
 
 class UserRemoteDatasourceImpl extends UserRemoteDatasource {
@@ -22,7 +22,7 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
     final response = await client.post(
       Uri.parse(apiUrl),
       headers: {
-        'Content-Type': 'application/json', // Added Content-Type header
+        'Content-Type': 'application/json',
       },
       body: body,
     );
@@ -37,6 +37,31 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
   }
 
   @override
+  Future<Usermodel> getmeremote(String token) async {
+    final String apiUrl = Urls.meuserurl();
+
+    final response = await client.get(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print("Decoded JSON: $data"); 
+      final temp= Usermodel.fromJson(data);
+      print("Decoded JSON: $temp"); 
+
+      return temp;
+    } else {
+      final data = json.decode(response.body);
+      throw Exception(data['message'] ?? 'no user logged ');
+    }
+  }
+
+  @override
   Future<String> authenticateuser(String email, String password) async {
     final String apiUrl = Urls.getuserurl();
     final body = json.encode({
@@ -47,7 +72,7 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
     final response = await client.post(
       Uri.parse(apiUrl),
       headers: {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json',
       },
       body: body,
     );

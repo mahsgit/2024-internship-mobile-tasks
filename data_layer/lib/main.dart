@@ -40,6 +40,8 @@ void main() async {
         create: (context) => getIt.get<DeleteBloc>(),
       ),
       BlocProvider(create: (context) => getIt.get<SighUpBloc>()),
+      BlocProvider(create: (context) => getIt.get<GetmeBloc>()),
+
       BlocProvider(create: (context) => getIt.get<SignInBloc>()),
       BlocProvider(
         create: (context) => SearchBloc(),

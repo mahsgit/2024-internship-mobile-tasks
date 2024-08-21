@@ -66,26 +66,30 @@ class _SigninState extends State<Signin> {
           ),
           Container(
             width: 160,
-            height: 80,
-            child: Center(
-              child: Text("ECOM",
-                  style: GoogleFonts.caveatBrush(
-                    textStyle: TextStyle(
-                      color: Color.fromRGBO(63, 81, 243, 1),
-                      fontWeight: FontWeight.w900,
-                      fontSize: 50,
-                    ),
-                  )),
+            height: 70,
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("ECOM",
+                    style: GoogleFonts.caveatBrush(
+                      textStyle: TextStyle(
+                        color: Color.fromRGBO(63, 81, 243, 1),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 80,
+                      ),
+                    )),
+              ),
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.blue),
+              border: Border.all(color: Color.fromRGBO(63, 81, 243, 1)),
               color: Color.fromARGB(255, 255, 255, 255),
               boxShadow: [
                 BoxShadow(
                   color: Color.fromARGB(255, 57, 57, 57).withOpacity(0.50),
-                  spreadRadius: 4,
-                  blurRadius: 9,
+                  spreadRadius: 3,
+                  blurRadius: 5,
                   offset: Offset(0, 5),
                 ),
               ],
@@ -106,11 +110,13 @@ class _SigninState extends State<Signin> {
                     ),
                     SizedBox(height: 30),
                     CustemText(
+                      obscureText: false,
                       labelText: 'Email',
                       controller: emailcontrollerin,
                     ),
                     SizedBox(height: 10),
                     CustemText(
+                      obscureText: true,
                       labelText: 'Password',
                       controller: passwordcontrollerin,
                     ),
@@ -118,7 +124,7 @@ class _SigninState extends State<Signin> {
                     ElevatedButton(
                       onPressed: () => signinfunc(context),
                       child: Text(
-                        "Sign In",
+                        "SIGN IN ",
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -132,9 +138,25 @@ class _SigninState extends State<Signin> {
                     SizedBox(
                       height: 100,
                     ),
-                    TextButton(
-                      onPressed: () => Navigator.pushNamed(context, '/signup'),
-                      child: Text('You dont have an account? Sign up'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don’t have an account?",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 142, 142, 142),
+                            )),
+                        TextButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/signup'),
+                          child: Text(
+                            'SIGN UP',
+                            style: TextStyle(
+                              color: Color.fromRGBO(63, 81, 243, 1),
+                              fontSize: 15,
+                            ),
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),

@@ -1,3 +1,5 @@
+import '../../domain/entities/userEntity.dart';
+
 abstract class UserBlocEvent{}
 class InitialEvent extends UserBlocEvent{}
 
@@ -18,5 +20,14 @@ class Signinevent extends UserBlocEvent{
   Signinevent({
     required this.email,
     required this.password});
+
+}
+
+
+class GetmeEvent extends UserBlocEvent{
+  final String token;
+  GetmeEvent({
+    required this.token,
+    });
 
 }

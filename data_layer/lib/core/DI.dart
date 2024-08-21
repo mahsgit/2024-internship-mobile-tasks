@@ -7,6 +7,7 @@ import '../features/login_and_registration/data/data_source/localtoken.dart';
 import '../features/login_and_registration/data/data_source/userremotedatasource.dart';
 import '../features/login_and_registration/data/repositories/userrepoimp.dart';
 import '../features/login_and_registration/domain/repository/user_repo.dart';
+import '../features/login_and_registration/domain/usecases/gettokenusecase.dart';
 import '../features/login_and_registration/domain/usecases/signinusecase.dart';
 import '../features/login_and_registration/domain/usecases/signupusecase.dart';
 import '../features/login_and_registration/presentation/bloc/user+bloc.dart';
@@ -37,12 +38,10 @@ Future<void> setup() async {
   getIt.registerFactory<NetworkInfo>(() => NetworkInfoImpl(internetChecker));
   getIt.registerSingleton<LocalToken>(
       Localtokenimp(sharedPreferences: sharedPreferences));
-  getIt.registerSingleton<ProductRemoteDatasource>(
-      ProductRemoteDatasourceImpl(
-        client: client,
-        localToken: getIt<LocalToken>(),
-        ));
-   
+  getIt.registerSingleton<ProductRemoteDatasource>(ProductRemoteDatasourceImpl(
+    client: client,
+    localToken: getIt<LocalToken>(),
+  ));
 
   getIt.registerSingleton<UserRemoteDatasource>(
       UserRemoteDatasourceImpl(client: client));
@@ -60,13 +59,14 @@ Future<void> setup() async {
       networkInfo: getIt()));
 
   getIt.registerSingleton<Signupusecase>(Signupusecase(getIt()));
-   getIt.registerSingleton<SigninUsecase>(SigninUsecase(getIt()));
+  getIt.registerSingleton<SigninUsecase>(SigninUsecase(getIt()));
 
   getIt.registerSingleton<ViewAllProductsUsecase>(
       ViewAllProductsUsecase(getIt()));
   getIt.registerSingleton<ViewSpecificProductUsecase>(
       ViewSpecificProductUsecase(getIt()));
   getIt.registerSingleton<UpdateProductUsecase>(UpdateProductUsecase(getIt()));
+  getIt.registerSingleton<GetUserEntityUseCase>(GetUserEntityUseCase(getIt()));
 
   getIt.registerSingleton<DeleteProductUsecase>(DeleteProductUsecase(getIt()));
   getIt.registerSingleton<CreateProductUsecase>(CreateProductUsecase(getIt()));
@@ -89,7 +89,12 @@ Future<void> setup() async {
   getIt.registerSingleton<SighUpBloc>(SighUpBloc(
     signupusecase: getIt(),
   ));
-   getIt.registerSingleton<SignInBloc>(SignInBloc(
+  getIt.registerSingleton<GetmeBloc>(GetmeBloc(
+    getUserEntityUseCase: getIt(),
+  ));
+
+  getIt.registerSingleton<SignInBloc>(SignInBloc(
     signinusecase: getIt(),
+    getmeBloc: getIt<GetmeBloc>(),
   ));
 }

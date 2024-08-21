@@ -54,4 +54,18 @@ class Userrepoimp extends UserRepo {
       return const Left(NetworkFailure("network error"));
     }
   }
+
+    @override
+  Future<Either<Failure, Userentity>> getUserrepo(String token) async {
+    if (await networkInfo.isconnected) {
+      try {
+        final result=await userRemoteDatasource.getmeremote(token);
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure("server failure"));
+      }
+    } else {
+      return const Left(NetworkFailure("network error"));
+    }
+  }
 }

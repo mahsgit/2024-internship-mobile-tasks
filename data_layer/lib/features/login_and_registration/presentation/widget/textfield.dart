@@ -1,14 +1,18 @@
+import 'dart:ffi';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class CustemText extends StatelessWidget {
-  final String labelText; // Label text above the TextField
-  final TextEditingController
-      controller; // Controller for managing TextField input
+  final String labelText;
+  final TextEditingController controller;
+  final bool obscureText;
 
   const CustemText({
     Key? key,
     required this.labelText,
     required this.controller,
+    required this.obscureText,
   }) : super(key: key);
 
   @override
@@ -21,32 +25,36 @@ class CustemText extends StatelessWidget {
           style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w500,
-              color: Color.fromARGB(108, 43, 43, 43)),
+              color: Color.fromARGB(137, 31, 31, 31)),
         ),
-        SizedBox(height: 8.0),
+        SizedBox(height: 5.0),
         TextField(
+          obscureText: obscureText,
           controller: controller,
           decoration: InputDecoration(
             hintText: 'Enter $labelText', // Fixed hint text string
             filled: true,
-            fillColor: Color.fromARGB(255, 237, 237, 237),
+            // fillColor: const Color(0xFAFAFA),
+            fillColor: Color.fromARGB(24, 179, 179, 179),
+
+            // Fill color
             hintStyle: TextStyle(
               color: Color.fromARGB(109, 147, 147, 147), // Hint text color
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14.0),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: Color(0xFFFAFAFA), // Border color
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14.0),
+              borderRadius: BorderRadius.circular(8.0),
               borderSide: BorderSide(
                 color: Color(0xFFFAFAFA), // Enabled border color
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14.0),
+              borderRadius: BorderRadius.circular(8.0),
               borderSide: BorderSide(
                 color: Color(0xFFFAFAFA), // Focused border color
               ),

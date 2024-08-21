@@ -14,8 +14,6 @@ import '../widgets/popups.dart';
 import '../widgets/productcard.dart';
 
 class RootApp extends StatefulWidget {
-  
-  
   const RootApp();
 
   @override
@@ -56,15 +54,25 @@ class _RootAppState extends State<RootApp> {
                               color: Color(0xFFAAAAAA),
                             ),
                           ),
-                          Text(
-                            "Yohannes",
-                            style: TextStyle(
-                              fontFamily: 'Sora',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
-                          ),
+                          BlocBuilder<GetmeBloc, UserBlocState>(
+                              builder: (context, state) {
+                            if (state is UserLogged) {
+                              return Text(
+                                state.user.name,
+                                style: TextStyle(
+                                  fontFamily: 'Sora',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              );
+                            } else if (state is UserFailure) {
+                              return Text("Error :${state.error}");
+                            } else if (state is UserInitial) {
+                              return CircularProgressIndicator();
+                            }
+                            return Container();
+                          }),
                         ],
                       ),
                     ),
@@ -127,7 +135,7 @@ class _RootAppState extends State<RootApp> {
                               .add(HoldDataEvent(state.product));
                           // context.read<SearchBloc>().emit(TEST(state.product));
 
-                          Navigator.pushNamed(context, '/search');
+                          Navigator.pushReplacementNamed(context, '/search');
                         },
                         child: Icon(
                           Icons.search,
@@ -157,7 +165,7 @@ class _RootAppState extends State<RootApp> {
           child: FloatingActionButton(
             shape: const CircleBorder(),
             onPressed: () {
-              Navigator.pushNamed(context, '/crudepage');
+              Navigator.pushReplacementNamed(context, '/crudepage');
             },
             backgroundColor: Color(0xFF3F51F3),
             child: const Icon(

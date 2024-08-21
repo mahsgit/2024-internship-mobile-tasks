@@ -143,7 +143,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                           context
                               .read<DeleteBloc>()
                               .add(DeleteData(id: productdetail.id));
-                        Navigator.pushNamed(context, '/');
+                        Navigator.pushReplacementNamed(context, '/');
 
                         },
                         style: OutlinedButton.styleFrom(
@@ -170,7 +170,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                   ElevatedButton(
                     onPressed: () {
                       {
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => Crudpage(productcrud:productdetail),
                           ),

@@ -97,7 +97,7 @@ class ProductRemoteDatasourceImpl extends ProductRemoteDatasource {
       Uri.parse(Urls.updateProductUrl(product.id)),
       headers: {
         'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token',
+         'Authorization': 'Bearer $token',
       },
       body: json.encode(product.toJson()),
     );

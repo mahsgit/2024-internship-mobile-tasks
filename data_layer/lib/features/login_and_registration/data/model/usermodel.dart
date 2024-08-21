@@ -1,35 +1,39 @@
-
 import '../../domain/entities/userEntity.dart';
 
-class Usermodel extends Userentity{
-   Usermodel({
-    required super.name,
-    required super.email,
-    required super.password,
-  });
+class Usermodel extends Userentity {
+  Usermodel({
+    required String id,
+    required String name,
+    required String email,
+  }) : super(
+          name: name,
+          email: email,
+          password: '', 
+        );
 
   factory Usermodel.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>?;
+
     return Usermodel(
-      email: json['email'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      password: json['password'] as String? ?? '',
+      id: data?['id'] ?? '',
+      name: data?['name'] ?? '',
+      email: data?['email'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'email': email,
       'name': name,
-      'password': password,
+      'email': email,
     };
   }
 
   Userentity toEntity() => Userentity(
-    email: email,
-    name:name,
-    password: password
-  );
+        name: name,
+        email: email,
+        password: '', // Handle password differently if needed
+      );
 
   @override
-  List<Object> get props => [ name, email, password];
+  List<Object?> get props => [name, email];
 }
