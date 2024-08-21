@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts:
   loading_animation_widget:
 
   formz: ^0.7.0
@@ -84,7 +85,7 @@ flutter:
   assets:
     - images/image.png
     - images/heels.jpg
-    - images/sneakers.jpg
+    # - images/sneakers.jpg
 
   #   - images/a_dot_ham.jpeg
 

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustemText extends StatelessWidget {
   final String labelText; // Label text above the TextField
-  final TextEditingController controller; // Controller for managing TextField input
+  final TextEditingController
+      controller; // Controller for managing TextField input
 
   const CustemText({
     Key? key,
@@ -18,24 +19,43 @@ class CustemText extends StatelessWidget {
         Text(
           labelText,
           style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
+              fontSize: 18.0,
+              fontWeight: FontWeight.w500,
+              color: Color.fromARGB(108, 43, 43, 43)),
         ),
         SizedBox(height: 8.0),
         TextField(
           controller: controller,
           decoration: InputDecoration(
-            hintText: 'Enter $labelText',
+            hintText: 'Enter $labelText', // Fixed hint text string
             filled: true,
-            fillColor: Colors.grey[200], // Light gray background color
+            fillColor: Color.fromARGB(255, 237, 237, 237),
+            hintStyle: TextStyle(
+              color: Color.fromARGB(109, 147, 147, 147), // Hint text color
+            ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(14.0),
               borderSide: BorderSide(
-                color: Colors.grey, // Light border color
+                color: Color(0xFFFAFAFA), // Border color
               ),
             ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14.0),
+              borderSide: BorderSide(
+                color: Color(0xFFFAFAFA), // Enabled border color
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14.0),
+              borderSide: BorderSide(
+                color: Color(0xFFFAFAFA), // Focused border color
+              ),
+            ),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          ),
+          style: TextStyle(
+            color: Color.fromARGB(255, 0, 0, 0), // Text color
           ),
         ),
       ],

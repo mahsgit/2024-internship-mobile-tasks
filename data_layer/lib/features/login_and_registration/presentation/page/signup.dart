@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../product/presentation/pages/home.dart';
 import '../bloc/user+bloc.dart';
@@ -43,69 +45,127 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign up'),
-      ),
-      body: BlocListener<SighUpBloc, UserBlocState>(
-        listener: (context, state) {
-         if (state is UserSuccess) {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => RootApp(),
-    ),
-  );
-}
- else if (state is UserFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Signup failed. Please try again."),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
+        body: BlocListener<SighUpBloc, UserBlocState>(
+      listener: (context, state) {
+        if (state is UserSuccess) {
+          Navigator.pushNamed(context, "/signin");
+        } else if (state is UserFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Signup failed. Please try again."),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 30),
-            CustemText(
-              labelText: 'Name',
-              controller: namecontroller,
+            SizedBox(
+              height: 50,
             ),
-            SizedBox(height: 30),
-            CustemText(
-              labelText: 'Email',
-              controller: emailcontroller,
-            ),
-            SizedBox(height: 30),
-            CustemText(
-              labelText: 'Password',
-              controller: passwordcontroller,
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () => senddata(context),
-              child: Text(
-                "Sign up",
-                style: TextStyle(color: Colors.white, fontSize: 17),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40, 20, 10, 30),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(
+                    width: 220,
+                  ),
+                  Container(
+                    width: 80,
+                    height: 40,
+                    child: Center(
+                      child: Text("ECOM",
+                          style: GoogleFonts.caveatBrush(
+                            textStyle: TextStyle(
+                              color: Color.fromRGBO(63, 81, 243, 1),
+                              fontWeight: FontWeight.w900,
+                              fontSize: 26,
+                            ),
+                          )),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.blue),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              Color.fromARGB(255, 57, 57, 57).withOpacity(0.50),
+                          spreadRadius: 2,
+                          blurRadius: 3,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                minimumSize: Size(350, 50),
-                backgroundColor: Color(0xFF3F51F3),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(38.0),
+              child: Column(
+                children: [
+                  Text(
+                    "Create your account",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      CustemText(
+                        labelText: 'Name',
+                        controller: namecontroller,
+                      ),
+                      SizedBox(height: 10),
+                      CustemText(
+                        labelText: 'Email',
+                        controller: emailcontroller,
+                      ),
+                      SizedBox(height: 10),
+                      CustemText(
+                        labelText: 'Password',
+                        controller: passwordcontroller,
+                      ),
+                      SizedBox(height: 40),
+                      ElevatedButton(
+                        onPressed: () => senddata(context),
+                        child: Text(
+                          "Sign up",
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          minimumSize: Size(350, 50),
+                          backgroundColor: Color(0xFF3F51F3),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 95,
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/signin'),
+                        child: Text('Already have an account? Sign in'),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 30,),
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/signin'),
-              child: Text('Already have an account? Sign in'),)
-
           ],
         ),
       ),
-    );
+    ));
   }
 }

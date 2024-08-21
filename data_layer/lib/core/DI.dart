@@ -35,14 +35,17 @@ Future<void> setup() async {
   var client = http.Client();
   var internetChecker = InternetConnectionChecker();
   getIt.registerFactory<NetworkInfo>(() => NetworkInfoImpl(internetChecker));
+  getIt.registerSingleton<LocalToken>(
+      Localtokenimp(sharedPreferences: sharedPreferences));
   getIt.registerSingleton<ProductRemoteDatasource>(
-      ProductRemoteDatasourceImpl(client: client));
+      ProductRemoteDatasourceImpl(
+        client: client,
+        localToken: getIt<LocalToken>(),
+        ));
+   
 
   getIt.registerSingleton<UserRemoteDatasource>(
       UserRemoteDatasourceImpl(client: client));
-
-  getIt.registerSingleton<LocalToken>(
-      Localtokenimp(sharedPreferences: sharedPreferences));
 
   getIt.registerSingleton<ProductLocalDatasource>(
       ProductLocalDatasourceImp(sharedPreferences: sharedPreferences));

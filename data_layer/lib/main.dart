@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'features/login_and_registration/domain/entities/userEntity.dart';
-import 'features/login_and_registration/domain/usecases/signupusecase.dart';
 import 'features/login_and_registration/presentation/bloc/user+bloc.dart';
-import 'features/login_and_registration/presentation/bloc/user_bloc_event.dart';
-import 'features/login_and_registration/presentation/bloc/user_bloc_state.dart';
 import 'features/login_and_registration/presentation/page/signin.dart';
 import 'features/login_and_registration/presentation/page/signup.dart';
+import 'features/login_and_registration/presentation/page/splash.dart';
 import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
 import 'features/product/presentation/bloc/homebloc/home_event.dart';
-import 'features/product/presentation/bloc/homebloc/home_state.dart';
 import 'features/product/presentation/bloc/search_bloc/search_bloc.dart';
-import 'features/product/presentation/bloc/search_bloc/search_bloc_event.dart';
 import 'features/product/presentation/pages/crudpage.dart';
 import 'features/product/presentation/pages/home.dart';
 import 'features/product/presentation/pages/search.dart';
-import 'features/product/presentation/widgets/popups.dart';
-import 'features/product/presentation/widgets/productcard.dart';
 import 'core/DI.dart';
 
 void main() async {
@@ -47,12 +39,8 @@ void main() async {
       BlocProvider(
         create: (context) => getIt.get<DeleteBloc>(),
       ),
-      BlocProvider(
-        create: (context) => getIt.get<SighUpBloc>()
-      ),
-       BlocProvider(
-        create: (context) => getIt.get<SignInBloc>()
-      ),
+      BlocProvider(create: (context) => getIt.get<SighUpBloc>()),
+      BlocProvider(create: (context) => getIt.get<SignInBloc>()),
       BlocProvider(
         create: (context) => SearchBloc(),
       ),
@@ -68,13 +56,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/signup',
+      initialRoute: '/splash',
       routes: {
         '/': (context) => RootApp(),
         '/search': (context) => const Search(),
         '/crudepage': (context) => const Crudpage(),
         '/signup': (context) => const Signup(),
         '/signin': (context) => const Signin(),
+        '/splash': (context) => const Splash(),
       },
     );
   }

@@ -14,7 +14,7 @@ class Localtokenimp extends LocalToken{
   Future<String?> getToken()async {
     final result = sharedPreferences.getString('token');
     if (result == null) {
-      return ("user not logged ");
+      return ("user not logged");
     }else{
     return result;
     }
@@ -22,6 +22,6 @@ class Localtokenimp extends LocalToken{
   
   @override
   Future<void> saveToken(String token) async {
-    final save= sharedPreferences.setString("token", token);
+   sharedPreferences.setString('token', token);
   }
 }
