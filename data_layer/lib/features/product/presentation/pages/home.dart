@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../login_and_registration/domain/entities/userEntity.dart';
@@ -21,6 +25,20 @@ class RootApp extends StatefulWidget {
 }
 
 class _RootAppState extends State<RootApp> {
+  XFile? image;
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        image = pickedFile;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,12 +48,26 @@ class _RootAppState extends State<RootApp> {
               return Row(
                 children: [
                   // round the child like image , container ... with circular boarder ==ClipRRect
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      color: Color.fromARGB(255, 210, 208, 208),
+
+                  GestureDetector(
+                    onTap: () => _pickImage(),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        color: Color.fromARGB(255, 210, 208, 208),
+                        child: image != null
+                            ? Image.file(
+                                File(image!.path),
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(
+                                Icons.person,
+                                size: 50,
+                                color: Colors.grey[700],
+                              ),
+                      ),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -62,7 +94,7 @@ class _RootAppState extends State<RootApp> {
                                 style: TextStyle(
                                   fontFamily: 'Sora',
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 15,
+                                  fontSize: 20,
                                   color: Colors.black,
                                 ),
                               );
@@ -88,9 +120,9 @@ class _RootAppState extends State<RootApp> {
               height: 35,
               child: Center(
                 child: IconButton(
-                  icon: Icon(Icons.notifications),
+                  icon: Icon(Icons.chat),
                   onPressed: () {
-                    showPopup(context);
+                    Navigator.of(context).pushNamed('/chat');
                   },
                 ),
               ),
@@ -135,7 +167,7 @@ class _RootAppState extends State<RootApp> {
                               .add(HoldDataEvent(state.product));
                           // context.read<SearchBloc>().emit(TEST(state.product));
 
-                          Navigator.pushReplacementNamed(context, '/search');
+                          Navigator.pushNamed(context, '/search');
                         },
                         child: Icon(
                           Icons.search,
@@ -165,7 +197,7 @@ class _RootAppState extends State<RootApp> {
           child: FloatingActionButton(
             shape: const CircleBorder(),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/crudepage');
+              Navigator.pushNamed(context, '/crudepage');
             },
             backgroundColor: Color(0xFF3F51F3),
             child: const Icon(

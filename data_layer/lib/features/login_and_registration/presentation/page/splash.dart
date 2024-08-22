@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Splash extends StatefulWidget {
@@ -11,23 +10,44 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  bool _startAnimation = false;
+  bool _reverseAnimation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animateText();
+  }
+
+  void _animateText() async {
+    setState(() {
+      _startAnimation = true;
+    });
+
+    await Future.delayed(Duration(seconds: 2));
+
+    setState(() {
+      _reverseAnimation = true;
+    });
+
+    await Future.delayed(Duration(seconds: 1));
+
+    Navigator.pushReplacementNamed(context, '/signup');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/signup');
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'images/image.png',
-                fit: BoxFit.cover,
-              ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'images/image.png',
+              fit: BoxFit.cover,
             ),
-            Positioned.fill(
-                child: Container(
+          ),
+          Positioned.fill(
+            child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
@@ -37,41 +57,54 @@ class _SplashState extends State<Splash> {
                       const Color.fromRGBO(63, 81, 243, 1).withOpacity(0.7)
                     ]),
               ),
-            )),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 280,
-              child: Center(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 250,
-                      height: 100,
-                      child: FittedBox(
-                        fit: BoxFit.cover,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "ECOM",
-                            // textAlign: TextAlign.center,
-                            style: GoogleFonts.caveatBrush(
-                                textStyle: TextStyle(
-                              color: Color.fromRGBO(63, 81, 243, 1),
-                              fontSize: 50,
-                            )),
-                          ),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: Duration(seconds: 1),
+            curve: Curves.easeInOut,
+            left: _startAnimation
+                ? (_reverseAnimation ? -300 : 20)
+                : -300, 
+            right: 20,
+            top: 280,
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 250,
+                    height: 100,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "ECOM",
+                          style: GoogleFonts.caveatBrush(
+                              textStyle: TextStyle(
+                            color: Color.fromRGBO(63, 81, 243, 1),
+                            fontSize: 50,
+                          )),
                         ),
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
                     ),
-                    SizedBox(
-                      height: 20,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    Text(
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AnimatedPositioned(
+                    duration: Duration(seconds: 1),
+                    curve: Curves.easeInOut,
+                    left: _reverseAnimation
+                        ? 20
+                        : -300, 
+                    right: _startAnimation
+                        ? (_reverseAnimation ? -300 : 20)
+                        : -300, 
+                    child: Text(
                       "ECOMMERCE APP",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -80,13 +113,13 @@ class _SplashState extends State<Splash> {
                         wordSpacing: 8,
                         letterSpacing: 4,
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

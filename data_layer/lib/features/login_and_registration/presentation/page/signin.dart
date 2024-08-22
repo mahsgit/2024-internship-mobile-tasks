@@ -20,8 +20,8 @@ class _SigninState extends State<Signin> {
   final TextEditingController passwordcontrollerin = TextEditingController();
 
   void signinfunc(BuildContext context) async {
-    final email = emailcontrollerin.text;
-    final password = passwordcontrollerin.text;
+    final email = emailcontrollerin.text.trim();
+    final password = passwordcontrollerin.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -147,7 +147,7 @@ class _SigninState extends State<Signin> {
                             )),
                         TextButton(
                           onPressed: () =>
-                              Navigator.pushNamed(context, '/signup'),
+                              Navigator.pushReplacementNamed(context, '/signup'),
                           child: Text(
                             'SIGN UP',
                             style: TextStyle(

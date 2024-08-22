@@ -45,9 +45,9 @@ class _SignupState extends State<Signup> {
   }
 
   Future<void> senddata(BuildContext context) async {
-    final name = namecontroller.text;
-    final email = emailcontroller.text;
-    final password = passwordcontroller.text;
+    final name = namecontroller.text.trim();
+    final email = emailcontroller.text.trim();
+    final password = passwordcontroller.text.trim();
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -77,7 +77,7 @@ class _SignupState extends State<Signup> {
         body: BlocListener<SighUpBloc, UserBlocState>(
       listener: (context, state) {
         if (state is UserSuccess) {
-          Navigator.pushNamed(context, "/signin");
+          Navigator.pushReplacementNamed(context, "/signin");
         } else if (state is UserFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -240,8 +240,8 @@ class _SignupState extends State<Signup> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, '/signin'),
+                            onPressed: () => Navigator.pushReplacementNamed(
+                                context, '/signin'),
                             child: Text(
                               'SIGN IN',
                               style: TextStyle(

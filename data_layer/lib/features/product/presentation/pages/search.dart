@@ -49,7 +49,7 @@ class _SearchState extends State<Search> {
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 12.0),
                               filled: false,
-                              hintText: "Leather"),
+                              hintText: "search ....."),
                         ),
                       ),
                       Padding(
@@ -117,7 +117,6 @@ class _bottomfilterState extends State<bottomfilter> {
   void _searchFunc() {
     final searchTerm = _searchNameController.text.trim();
     if (searchTerm.isNotEmpty) {
-      print("send");
       context.read<SearchBloc>().add(FetchSearchData(name: searchTerm));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

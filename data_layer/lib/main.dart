@@ -8,6 +8,7 @@ import 'features/product/presentation/bloc/addbloc/add_bloc.dart';
 import 'features/product/presentation/bloc/homebloc/home_block.dart';
 import 'features/product/presentation/bloc/homebloc/home_event.dart';
 import 'features/product/presentation/bloc/search_bloc/search_bloc.dart';
+import 'features/product/presentation/pages/chat.dart';
 import 'features/product/presentation/pages/crudpage.dart';
 import 'features/product/presentation/pages/home.dart';
 import 'features/product/presentation/pages/search.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const Signup(),
         '/signin': (context) => const Signin(),
         '/splash': (context) => const Splash(),
+        '/chat': (context) => const Chat(),
       },
     );
   }

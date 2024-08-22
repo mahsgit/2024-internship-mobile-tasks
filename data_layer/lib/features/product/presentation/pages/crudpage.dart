@@ -23,31 +23,28 @@ class _CrudpageState extends State<Crudpage> {
   final TextEditingController _pricecontroller = TextEditingController();
   final TextEditingController _descriptioncontroller = TextEditingController();
 
-  File? _Image;
-  String _imagePath = ' ';
+  File? _image;
+  String? _imagePath;
 
   @override
   void initState() {
     super.initState();
     if (widget.productcrud != null) {
       _namecontroller.text = widget.productcrud?.name ?? '';
-      _categorycontroller.text = widget.productcrud?.category ?? 'uu';
+      _categorycontroller.text = widget.productcrud?.category ?? '';
       _pricecontroller.text = widget.productcrud?.price.toString() ?? '';
       _descriptioncontroller.text = widget.productcrud?.description ?? '';
-      _imagePath = widget.productcrud?.imageUrl ?? '';
+      _imagePath = widget.productcrud?.imageUrl;
     }
   }
 
   Future<void> _pickImage() async {
-    //initializing
     final ImagePicker _picker = ImagePicker();
-    // open gallery to upload image
-    final XFile? pickedimage =
-        await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedimage != null) {
+    final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
       setState(() {
-        _Image = File(pickedimage.path);
-        _imagePath = pickedimage.path;
+        _image = File(pickedImage.path);
+        _imagePath = pickedImage.path;
       });
     }
   }
@@ -55,14 +52,13 @@ class _CrudpageState extends State<Crudpage> {
   void _saveProduct() {
     final String name = _namecontroller.text;
     final String category = _categorycontroller.text;
-    final double price = double.parse(_pricecontroller.text);
+    final double price = double.tryParse(_pricecontroller.text) ?? 0;
     final String description = _descriptioncontroller.text;
 
     if (name.isNotEmpty &&
         category.isNotEmpty &&
-        (_Image != null || widget.productcrud?.imageUrl != null)) {
-      final String imagepath =
-          _Image != null ? _Image!.path : widget.productcrud!.imageUrl;
+        (_image != null || _imagePath != null)) {
+      final String imagePath = _image?.path ?? _imagePath ?? '';
 
       if (widget.productcrud != null) {
         context.read<UpdateBloc>().add(AddData(
@@ -71,7 +67,7 @@ class _CrudpageState extends State<Crudpage> {
             category: category,
             price: price,
             description: description,
-            imagePath: imagepath));
+            imagePath: imagePath));
       } else {
         context.read<AddBloc>().add(AddData(
             id: Uuid().v4(),
@@ -79,11 +75,11 @@ class _CrudpageState extends State<Crudpage> {
             category: category,
             price: price,
             description: description,
-            imagePath: imagepath));
+            imagePath: imagePath));
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("please fill all the fieldsss"),
+        content: Text("Please fill all fields"),
       ));
     }
   }
@@ -91,45 +87,46 @@ class _CrudpageState extends State<Crudpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-              widget.productcrud != null ? 'Update Product' : 'Add Product'),
-        ),
-        body: MultiBlocListener(
-          listeners: [
-            BlocListener<AddBloc, AddBlocState>(
-              listener: (context, state) {
-                if (state is SubmissionSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('successfully added'),
-                  ));
-                  Navigator.pushReplacementNamed(context, '/');
-                } else if (state is SubmissionFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error)),
-                  );
-                }
-              },
-            ),
-            BlocListener<UpdateBloc, AddBlocState>(
-              listener: (context, state) {
-                if (state is SubmissionSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('successfully updated'),
-                  ));
-                  Navigator.pushReplacementNamed(context, '/');
-                } else if (state is SubmissionFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error)),
-                  );
-                }
-              },
-            ),
-          ],
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
+      appBar: AppBar(
+        title: Text(widget.productcrud != null ? 'Update Product' : 'Add Product'),
+      ),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<AddBloc, AddBlocState>(
+            listener: (context, state) {
+              if (state is SubmissionSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Successfully added'),
+                ));
+                Navigator.pushReplacementNamed(context, '/');
+              } else if (state is SubmissionFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.error)),
+                );
+              }
+            },
+          ),
+          BlocListener<UpdateBloc, AddBlocState>(
+            listener: (context, state) {
+              if (state is SubmissionSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Successfully updated'),
+                ));
+                Navigator.pushReplacementNamed(context, '/');
+              } else if (state is SubmissionFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.error)),
+                );
+              }
+            },
+          ),
+        ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 228, 228, 228),
                     borderRadius: BorderRadius.circular(24),
@@ -137,103 +134,92 @@ class _CrudpageState extends State<Crudpage> {
                   width: double.infinity,
                   height: 200,
                   margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Stack(
-                    children: [
-                      if (widget.productcrud == null)
-                        _imagePath.isEmpty
-                            ? Center(
-                                child: GestureDetector(
-                                  onTap: _pickImage,
-                                  child: Icon(Icons.image, size: 60),
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: _pickImage,
-                                child: Image.file(
-                                  File(_imagePath),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                              )
-                      else
-                        Image.network(
-                          widget.productcrud!.imageUrl,
+                  child: _image != null
+                      ? Image.file(
+                          _image!,
                           fit: BoxFit.cover,
                           width: double.infinity,
                           height: double.infinity,
                         )
-                    ],
-                  ),
+                      : (_imagePath != null && _imagePath!.isNotEmpty)
+                          ? Image.network(
+                              _imagePath!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            )
+                          : Center(
+                              child: Icon(
+                                Icons.image,
+                                size: 60,
+                                color: Colors.grey[600],
+                              ),
+                            ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Name"),
-                      CustomTextField(
-                        width: 400,
-                        height: 45,
-                        controller: _namecontroller,
-                      ),
-                      SizedBox(height: 10),
-                      Text("Category"),
-                      CustomTextField(
-                        width: 400,
-                        height: 45,
-                        controller: _categorycontroller,
-                      ),
-                      SizedBox(height: 10),
-                      Text("Price"),
-                      CustomTextField(
-                        width: 400,
-                        height: 45,
-                        controller: _pricecontroller,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            '\$',
-                            style: TextStyle(fontSize: 18),
-                          ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Name"),
+                    CustomTextField(
+                      width: 400,
+                      height: 45,
+                      controller: _namecontroller,
+                    ),
+                    SizedBox(height: 10),
+                    Text("Category"),
+                    CustomTextField(
+                      width: 400,
+                      height: 45,
+                      controller: _categorycontroller,
+                    ),
+                    SizedBox(height: 10),
+                    Text("Price"),
+                    CustomTextField(
+                      width: 400,
+                      height: 45,
+                      controller: _pricecontroller,
+                      suffixIcon: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          '\$',
+                          style: TextStyle(fontSize: 18),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text("Description"),
-                      CustomTextField(
-                        width: 400,
-                        height: 120,
-                        controller: _descriptioncontroller,
-                      ),
-                      SizedBox(height: 40),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              ElevatedButton(
-                                onPressed: _saveProduct,
-                                child: Text("Apply",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17)),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  minimumSize: Size(350, 50),
-                                  backgroundColor: Color(0xFF3F51F3),
-                                ),
-                              ),
-                            ],
+                    ),
+                    SizedBox(height: 10),
+                    Text("Description"),
+                    CustomTextField(
+                      width: 400,
+                      height: 120,
+                      controller: _descriptioncontroller,
+                    ),
+                    SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _saveProduct,
+                          child: Text("Apply", style: TextStyle(color: Colors.white, fontSize: 17)),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: Size(350, 50),
+                            backgroundColor: Color(0xFF3F51F3),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

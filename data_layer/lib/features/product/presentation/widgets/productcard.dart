@@ -6,15 +6,10 @@ import 'package:task6/features/product/presentation/pages/detail.dart';
 
 import '../../domain/entities/product.dart';
 
-
-
-
-
 class ProductCard extends StatelessWidget {
-  
   final List<Product> products;
 
-   ProductCard({super.key, required this.products});
+  ProductCard({super.key, required this.products});
 
   List<Widget> _buildCard(BuildContext context) {
     return products.map((product) {
@@ -23,7 +18,7 @@ class ProductCard extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => Detail(productdetail:product ),
+              builder: (BuildContext context) => Detail(productdetail: product),
             ),
           );
         },
@@ -36,14 +31,12 @@ class ProductCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-                  Image.network(
-                      product.imageUrl,
-                      fit: BoxFit.cover,
-                      height: 150,
-                      width: double.infinity,
-                    ),
-
-      
+              Image.network(
+                product.imageUrl,
+                fit: BoxFit.cover,
+                height: 150,
+                width: double.infinity,
+              ),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
@@ -59,7 +52,6 @@ class ProductCard extends StatelessWidget {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                           ),
-
                         ),
 
                         //change it to 2 decimal degit 25.00
@@ -91,18 +83,16 @@ class ProductCard extends StatelessWidget {
           ),
         ),
       );
-
-      
-    }).toList();// it return list of widgets
+    }).toList(); // it return list of widgets
   }
 
   @override
   Widget build(BuildContext context) {
     return GridView.count(
       // one item per row so 1 column
-      crossAxisCount: 1,
-      childAspectRatio: 10 / 7,
-      padding: EdgeInsets.symmetric(vertical: 8),
+      crossAxisCount: 2,
+      childAspectRatio: 2 / 3,
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       // call the list or product we build in _buildCard method
       children: _buildCard(context),
     );
