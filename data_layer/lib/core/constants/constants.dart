@@ -3,6 +3,7 @@ class Urls {
   static const String baseUrluseradd = 'https://g5-flutter-learning-path-be.onrender.com/api/v2/auth/register';
   static const String baseUrluserget = 'https://g5-flutter-learning-path-be.onrender.com/api/v2/auth/login';
   static const String baseUrluserme = 'https://g5-flutter-learning-path-be.onrender.com/api/v2/users/me';
+  static const String chaturl="https://g5-flutter-learning-path-be.onrender.com/api/v3/chats";
 
 
 
@@ -22,7 +23,16 @@ class Urls {
   static String displayAllProductsUrl() => baseUrl;
   static String getuserurl() => baseUrluserget;
   static String meuserurl() => baseUrluserme;
-
   static String adduserurl() => baseUrluseradd;
+
+
+
+
+  static String deleteChatUrl(String id) => '$chaturl/$id';
+  static String getchatmessageUrl(String id) => '$chaturl/$id';
+  static String initialchatUrl(String id) => '$chaturl/$id';
+  static String mychatbyidUrl(String id) => '$chaturl/$id';
+  static String mychatUrl() => chaturl;
+
 
 }
